@@ -1,34 +1,39 @@
 {
-  "name": "android-filesystem-search-rules",
-  "version": "1.0.0",
+  "protocol": "02-filesystem-search",
+  "verified_on": {
+    "android": "13",
+    "termux": "0.118",
+    "arch": "aarch64",
+    "verified_at": "2026-10-10"
+  },
   "rules": {
     "R-0201": {
       "title": "/sdcard 是 noexec，不要 chmod +x",
-      "summary": "共享存储挂载为 noexec，chmod 无效。执行前需复制到 $HOME 或 $PREFIX/tmp。",
-      "tags": ["noexec", "sdcard", "permission-denied", "bash"],
+      "summary": "共享存储挂载 noexec，chmod 无效。执行前 cp 到 $HOME 或 $PREFIX/tmp。",
+      "tags": ["noexec", "sdcard", "permission"],
       "severity": "high",
-      "error_signals": ["Permission denied", "EACCES"]
+      "priority": 1
     },
     "R-0202": {
-      "title": "根目录与伪文件系统 (/proc, /sys) 禁扫",
-      "summary": "禁止扫描 /、/proc、/sys、/data。权限拒绝会中断命令，os error 13 易引发二次幻觉。",
-      "tags": ["recursive", "os-error-13", "procfs", "sysfs"],
-      "severity": "critical",
-      "error_signals": ["os error 13", "Permission denied", "EIO", "Input/output error"]
+      "title": "禁止全盘递归 /proc /sys /data",
+      "summary": "这些路径权限拒绝会中断整条命令。用 -xdev 或显式排除。",
+      "tags": ["recursive", "permission", "proc"],
+      "severity": "high",
+      "priority": 1
     },
     "R-0203": {
-      "title": "搜索必须显式限制深度与边界 (-maxdepth, -xdev)",
-      "summary": "find 必须附加 -maxdepth 3-4 和 -xdev，防止进入隐藏系统树或外部挂载点导致卡死。",
-      "tags": ["find", "hang", "maxdepth", "xdev"],
+      "title": "搜索必须带 maxdepth 和 xdev",
+      "summary": "默认递归无深度限制，容易卡死。建议 -maxdepth 4 -xdev。",
+      "tags": ["find", "hang", "maxdepth"],
       "severity": "medium",
-      "error_signals": ["timeout", "hang"]
+      "priority": 2
     },
     "R-0204": {
       "title": "超时与配额耗尽后的降级决策",
-      "summary": "连续失败或超时遵循阶梯降级：换 rg -> ls 探测 -> 主动熔断上报，禁止盲目加深或全盘重试。",
+      "summary": "连续 2 次失败或超时，按阶梯降级并最终熔断报告。",
       "tags": ["quota", "degrade", "probe", "circuit-breaker"],
       "severity": "medium",
-      "error_signals": ["retry-limit", "timeout"]
+      "priority": 2
     }
   }
 }

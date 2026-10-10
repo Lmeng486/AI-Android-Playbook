@@ -1,0 +1,15 @@
+{
+  "protocol": "02-filesystem-search",
+  "verified_on": {
+    "android": "13",
+    "termux": "0.118",
+    "arch": "aarch64",
+    "verified_at": "2026-10-10"
+  },
+  "expires_after_days": 180,
+  "reverify_triggers": [
+    "Termux targetSdk 变更",
+    "Android 14+ 存储策略变更",
+    "SELinux 策略收紧"
+  ]
+}
