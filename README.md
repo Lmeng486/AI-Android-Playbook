@@ -26,12 +26,26 @@
 
 ## 🧭 核心协议索引 (Protocols)
 
-| 编号 | 协议名称 | 解决痛点 | 适用场景 |
-| :--- | :--- | :--- | :--- |
-| **01** | [APK-Pipeline](./protocols/01-apk-pipeline.md) | 手搓 APK 打包失败、`-124` 压缩对齐错误、SELinux 拦截 | 手机端免 Gradle 快速构建轻量原生 APK |
-| **02** | [FS-Search-Rules](./protocols/02-filesystem-search.md) | 全盘扫 `/` 导致权限暴毙 (`error 13`)、卡死 | 终端找文件、定向搜索与防御性降级 |
-| **03** | [ARM64-Arch-Rules](./protocols/03-arm64-environment.md) | x86 包塞给 aarch64、PC 图形库在手机终端崩溃 | Python/Node/Rust 依赖安装与工具链选型 |
-| **04** | [Agent-Pitfalls](./protocols/04-agent-common-pitfalls.md) | 臆造不存在的包 (Slopsquatting)、截断盲区螺旋、工具误选 | Agent 自主编码、多工具调用、自愈死循环防御 |
+| 编号 | 协议名称 | 解决痛点 | 适用场景 | 架构形态 |
+| :--- | :--- | :--- | :--- | :--- |
+| **01** | [APK-Pipeline](./protocols/01-apk-pipeline.md) | 手搓 APK 打包失败、`-124` 压缩对齐错误、SELinux 拦截 | 手机端免 Gradle 快速构建轻量原生 APK | Monolithic Protocol |
+| **02** | [FS-Search-Rules](./protocols/02-filesystem-search.md) | 全盘扫 `/` 导致权限暴毙 (`error 13`)、卡死 | 终端找文件、定向搜索与防御性降级 | [模块化规则集](./protocols/02-filesystem-search/) (R-0201 ~ R-0204) |
+| **03** | [ARM64-Arch-Rules](./protocols/03-arm64-environment.md) | x86 包塞给 aarch64、PC 图形库在手机终端崩溃 | Python/Node/Rust 依赖安装与工具链选型 | Monolithic Protocol |
+| **04** | [Agent-Pitfalls](./protocols/04-agent-common-pitfalls.md) | 臆造不存在的包 (Slopsquatting)、截断盲区螺旋、工具误选 | Agent 自主编码、多工具调用、自愈死循环防御 | Monolithic Protocol |
+
+---
+
+## 🤖 自动化检索与 Agent 上下文清单 (Agent Retrieval Manifest)
+
+为方便现代自主 Agent、RAG 向量库与网络爬虫精准检索并命中本项目的物理世界避坑规则，本项目提供了**基于特征错误签名的机器可读索引**：
+
+👉 **[查看完整 Agent 路由索引清单 (ai-manifest.md)](./ai-manifest.md)**
+
+遇到以下报错特征时，可直接定位并提取对应解决方案：
+- **`os error 13` / `Permission denied` 递归报错** ➡️ [R-0202: 根目录禁扫](./protocols/02-filesystem-search/rules/R-0202.md)
+- **`/sdcard` 执行脚本报 `Permission denied`** ➡️ [R-0201: noexec 绕过](./protocols/02-filesystem-search/rules/R-0201.md)
+- **APK 安装抛出 `-124 uncompressed and aligned`** ➡️ [Protocol-01: zipalign 4 字节对齐](./protocols/01-apk-pipeline.md)
+- **Agent 执行 `set -e` 击毁会话 / 臆造虚空包名** ➡️ [Protocol-04: Agent 行为防踩坑规范](./protocols/04-agent-common-pitfalls.md)
 
 ---
 
