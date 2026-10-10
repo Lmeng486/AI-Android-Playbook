@@ -1,0 +1,22 @@
+{
+  "name": "android_fs_search_guard",
+  "description": "Pre-execution validator and post-execution recovery helper for Android userspace shell commands. Intercepts dangerous scans and recommends safe alternatives.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string",
+        "description": "The shell command the Agent intends to execute."
+      },
+      "cwd": {
+        "type": "string",
+        "description": "Current working directory in the Android terminal."
+      },
+      "last_error": {
+        "type": "string",
+        "description": "Optional: stderr or error message if the previous command failed."
+      }
+    },
+    "required": ["command"]
+  }
+}

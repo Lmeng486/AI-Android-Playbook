@@ -49,6 +49,18 @@
 
 ---
 
+## 🛡️ 运行时拦截与 Harness 中间件 (Runtime Guard & Interceptor)
+
+从“可被检索的文档”演进为“不可被绕过的执行防线”。本项目包含零依赖的运行时守护原型，支持前置指令拦截与后置错误自动注入：
+
+👉 **[查看 Harness 运行中间件与使用方式](./harness/)**
+
+- **Pre-execution Guard**：拦截 `chmod +x /sdcard/*.sh` 与无约束全盘 `find /`，在命令执行前掐灭崩溃隐患。
+- **Post-execution Recovery**：捕获终端 `os error 13` 等错误输出，自动注入对应的规则 Markdown 进模型上下文，实现错误自愈。
+- **Decay & Expiry Warning**：基于元数据动态校验规则时效，防止陈旧经验误导模型。
+
+---
+
 ## 💉 一键注入 System Prompt (Quick Injection)
 
 如果你正在使用自定义 System Prompt 或支持上下文挂载的 AI 客户端，可直接引入下述精炼指令条目：

@@ -1,0 +1,43 @@
+# Protocol-02 运行时触发配置 (双轨：前置拦截 + 错误后置自愈)
+version: "1.0.0"
+protocol: "02-filesystem-search"
+
+# 前置执行拦截 (Pre-execution Guards)
+pre_execution:
+  - id: "PRE-0201"
+    name: "sdcard-noexec-block"
+    pattern: "(chmod\\s+\\+x.*(/sdcard|/storage/emulated/0))|((/sdcard|/storage/emulated/0)/[^\\s]+\\.sh)"
+    action: "block"
+    rule_ref: "R-0201"
+    message: "[GUARD BLOCK]: /sdcard is mounted as noexec. Copy the script to $HOME or $PREFIX/tmp before executing."
+
+  - id: "PRE-0202"
+    name: "root-proc-sys-unbounded-search"
+    pattern: "find\\s+(/|/proc|/sys|/data)\\b(?!.*(-maxdepth|-xdev))"
+    action: "block"
+    rule_ref: "R-0202"
+    message: "[GUARD BLOCK]: Unbounded search on system directories (/proc, /sys, /) will abort on permission errors. Restrict depth or use -xdev."
+
+# 后置错误自愈注入 (Post-execution Error-Driven Injections)
+post_execution:
+  - id: "POST-0201"
+    name: "os-error-13-handler"
+    match_stderr: "(Permission denied \\(os error 13\\))|(os error 13)"
+    action: "inject_rule"
+    rule_ref: "R-0202"
+    circuit_breaker_threshold: 2
+
+  - id: "POST-0202"
+    name: "sdcard-permission-denied"
+    match_stderr: "Permission denied"
+    match_command: "/sdcard|/storage/emulated/0"
+    action: "inject_rule"
+    rule_ref: "R-0201"
+    circuit_breaker_threshold: 1
+
+  - id: "POST-0203"
+    name: "search-timeout-or-hang"
+    match_stderr: "(command timed out|killed after 30)"
+    action: "inject_rule"
+    rule_ref: "R-0204"
+    circuit_breaker_threshold: 2
