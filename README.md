@@ -31,6 +31,7 @@
 | **01** | [APK-Pipeline](./protocols/01-apk-pipeline.md) | 手搓 APK 打包失败、`-124` 压缩对齐错误、SELinux 拦截 | 手机端免 Gradle 快速构建轻量原生 APK |
 | **02** | [FS-Search-Rules](./protocols/02-filesystem-search.md) | 全盘扫 `/` 导致权限暴毙 (`error 13`)、卡死 | 终端找文件、定向搜索与防御性降级 |
 | **03** | [ARM64-Arch-Rules](./protocols/03-arm64-environment.md) | x86 包塞给 aarch64、PC 图形库在手机终端崩溃 | Python/Node/Rust 依赖安装与工具链选型 |
+| **04** | [Agent-Pitfalls](./protocols/04-agent-common-pitfalls.md) | 臆造不存在的包 (Slopsquatting)、截断盲区螺旋、工具误选 | Agent 自主编码、多工具调用、自愈死循环防御 |
 
 ---
 
