@@ -32,6 +32,7 @@
 | **02** | [FS-Search-Rules](./protocols/02-filesystem-search.md) | 全盘扫 `/` 导致权限暴毙 (`error 13`)、卡死 | 终端找文件、定向搜索与防御性降级 | [模块化规则集](./protocols/02-filesystem-search/) (R-0201 ~ R-0204) |
 | **03** | [ARM64-Arch-Rules](./protocols/03-arm64-environment.md) | x86 包塞给 aarch64、PC 图形库在手机终端崩溃 | Python/Node/Rust 依赖安装与工具链选型 | Monolithic Protocol |
 | **04** | [Agent-Pitfalls](./protocols/04-agent-common-pitfalls.md) | 臆造不存在的包 (Slopsquatting)、截断盲区螺旋、工具误选 | Agent 自主编码、多工具调用、自愈死循环防御 | Monolithic Protocol |
+| **05** | [Cross-Env-Traps](./protocols/05-cross-env-traps.md) | 会话吞 heredoc/多行、双空间 `/tmp` 不互通、MIUI 后台冻结（APP_STANDBY）、GitHub API `updated_at`≠`merged_at` | 跨环境会话与数据中转、后台长任务恢复、API 数据核验 | Monolithic Protocol |
 
 ---
 
